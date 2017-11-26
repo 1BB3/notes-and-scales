@@ -2,12 +2,30 @@
 //Trying to comment and log as much possible
 //Happy Coding
 
+//Checks whether the browser is chrome.
+var isBrowserChrome = function () {
+  var gabs = navigator.userAgent;
+  return gabs.includes("Chrome");
+}
+
+//you are Fucked..LOL
+var youAreFucked = function(){
+  console.log("Browser is Chrome and offline\nCross Origin Reference from local storage is not supported\nUse a local webserver when you want to do that.");
+  alert("Browser is Chrome and offline\nCross Origin Reference from local storage is not supported\nUse a local webserver when you want to do that.");
+  return 0;
+}
+
+//Chrome does not support access to files directly from the browser, either we have to set up local webserver on the computer
+//or access the file remotely from http url.
+var jsonUrl = (isBrowserChrome())?(navigator.onLine)?"https://raw.githubusercontent.com/1BB3/notes-and-scales/master/rootNotes.json":youAreFucked():"rootNotes.json";
+console.log(jsonUrl);
+console.log(navigator.onLine);
 //Http request to import notes
-var notes = (function() {
+var getNotes = function() {
       var json = null;
       $.ajax({
-        async: false,//Request should be sync instead of async because json(null) will be returned before http request is completed.
-        url: 'rootNotes.json',
+        async: false,//Request should be sync instead of async because json(null) will be returned before http request can be completed.
+        url: jsonUrl,
         dataType: 'json',
         success: function(data){
           console.log("Ajax http request : success");  //program log
@@ -21,10 +39,54 @@ var notes = (function() {
         console.log("Ajax http request : complete");  //program log
       });
       return json;
-})();
+};
 
-//program log
-(notes)?console.log("Succesfully import Root Notes"):console.log("Root notes not Imported");
+//OKay dont lose hope man if you are Fucked then be happy for you dick and check the following line of code
+//and thank me (Gabs)
+//Who the fuck needs ajax when you can just do this
+
+var notes = (!jsonUrl)?
+   {
+     "notes" : ["A",
+     "A#",
+     "B",
+     "C",
+     "C#",
+     "D",
+     "D#",
+     "E",
+     "F",
+     "F#",
+     "G",
+     "G#"]
+   }
+:getNotes();
+//LOL.
+
+(notes)?console.log("Succesfully import Root Notes"):console.log("Root notes not Imported\nUsing from Variable");//program log
+if(!notes){notes = {
+  "notes" : ["A",
+  "A#",
+  "B",
+  "C",
+  "C#",
+  "D",
+  "D#",
+  "E",
+  "F",
+  "F#",
+  "G",
+  "G#"]
+}
+};//More LOL Now the program works either way.
+//Lado jasto puti Long ass and ineffective program.
+//Why didn't I do this from the begining?
+//"Trying to be pro"
+//....Haha noob. Fuck Fuck Fucking Shit.
+
+//And NABIN Mind making some good UI for this??
+//Not necessary though.But if you will do it then make a piano/keyboard keys layout also Okay. 
+
 console.log(notes.notes);
 
 var scaleSequence = [0,2,2,1,2,2,2,1]; //W W H W W W H : W = whole note , H = Half note.
